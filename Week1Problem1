@@ -1,0 +1,72 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class MainClass{
+    vector<int> input[5];
+    vector<pair<int, int>> Queries[5];
+    vector<int> expectedOutput[5];
+    public:
+        vector<int> output[5];
+        MainClass(vector<int> input[], vector<int> expectedOutput[], vector<pair<int, int>> Queries[]);
+        vector<int> Solution(int n);
+        void Test();
+};
+
+MainClass::MainClass(vector<int> input[], vector<int> expectedOutput[], vector<pair<int, int>> Queries[]){
+    for(int i = 0; i < 5; i++){
+        this->input[i] = input[i];
+    }
+    for(int i = 0; i < 5; i++){
+        this->Queries[i] = Queries[i];
+    }
+    for(int i = 0; i < 5; i++){
+        this->expectedOutput[i] = expectedOutput[i];
+    }
+}
+
+vector<int> MainClass::Solution(int n){
+    vector<int> res;
+    for(int i = 0; i < Queries[n].size(); i++){
+        res[i] = input[n][Queries[n][i].first];
+        for(int j = Queries[n][i].first+1; j <= Queries[n][i].second; j++){
+            res[i] = res[i] ^ input[n][j];
+        }
+    }
+    return res;
+}
+
+void MainClass::Test(){
+    for(int i = 0; i < 5; i++){
+        if(output[i] != expectedOutput[i])
+            cout << "Wrong answer for TestCase " << i+1 << "\n";
+    }
+}
+
+int main() {
+    
+    vector<int> I[10];
+    I[0] = {1, 3, 4, 8};
+    I[1] = {2, 3, 0};
+    I[2] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+    I[3] = {438, 5564, 186, 0, 272, 173};
+    I[4] = {8, 7, 178, 0, 76, 88};
+    vector<pair<int, int>> Q[5];
+    Q[0] = {{0,1},{1,2},{0,3},{3,3}};
+    Q[1] = {{0,1},{0,2},{1,2}};
+    Q[2] = {{1,1},{2,8},{3,5},{5,7},{2,6},{1,8}};
+    Q[3] = {{2,5},{1,3},{3,5}};
+    Q[4] = {{1,5},{2,2},{0,4},{2,4},{3,5}};
+    vector<int> EO[5];
+    EO[0] = {2,7,14,8};
+    EO[1] = {1,1,3};
+    EO[2] = {1, 1, 1, 1, 1, 0}; 
+    EO[3] = {263, 5382, 445};
+    EO[4] = {161, 178, 241, 254, 20 };
+    MainClass mc(I, EO, Q);
+    for(int i = 0; i < 5; i++){
+        mc.output[i] = mc.Solution(i);
+    }
+    mc.Test();
+    return 0;
+}
