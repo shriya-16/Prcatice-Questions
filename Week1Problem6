@@ -1,0 +1,27 @@
+#include <iostream>
+#include <map>
+using namespace std;
+
+int single(int arr[], int n){
+    
+  map<int, int> m;
+  
+  for(int i = 0; i < n; i++){
+    if(m.find(arr[i])==m.end())
+        m.insert(make_pair(arr[i], 1));
+    else
+        m[arr[i]]++;
+  }
+  for(auto it = m.begin(); it != m.end(); ++it)
+    if(it->second==1)
+      return it->first;
+}
+
+int main(){
+  int n; cin >> n;
+  int arr[n];
+  for(int i = 0; i < n; i++)
+    cin >> arr[i];
+  cout << single(arr, n);
+  return 0;
+}
