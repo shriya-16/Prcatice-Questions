@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define f(i, n) for(int i = 0; i < n; i++)
+
+vector<int> minChanges(int n){
+    vector<int> res;
+    int index = 1, power = 1;
+    res.push_back(0);
+    for(int i = 1; i <= n; i++){
+        if(i==power){
+            res[i] = 1;
+            power <<= 1;
+            index = 1;
+        }
+        else{
+            res[i] = res[index++] + 1;
+        }
+    }
+    return res;
+}
+
+int main(){
+    int n;
+    cin >> n;
+    vector<int> res;
+    res = countSet(n);
+    f(i, n+1)
+        cout << res[i] << " ";
+    return 0;
+}
