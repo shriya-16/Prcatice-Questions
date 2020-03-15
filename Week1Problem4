@@ -1,0 +1,17 @@
+#include <iostream>  
+using namespace std; 
+  
+int minChanges(int n) { 
+    if (n == 1) 
+        return 0; 
+    else if (n % 2 == 0) 
+        return 1 + minChanges(n / 2); 
+    else
+        return 1 + min(minChanges(n - 1),minChanges(n + 1)); 
+} 
+
+int main(){ 
+    int n; cin >> n;
+    cout << minChanges(n);
+    return 0; 
+}
