@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int nearestPower(int n){
+    int power = 1;
+    for(int i = 0; i < n; i++){
+        power *= 2;
+        if(power > n)
+            break;
+    }
+    return power;
+}
+
+void constructTree(int input[], vector<int> &segTree, int low, int high, int pos){
+    if(low == high) {
+        segTree[pos] = input[low];
+        return;
+    }
+    int mid = (low + high)/2;
+    constructTree(input, segTree, low, mid, 2*pos+1);
+    constructTree(input, segTree, mid+1, high, 2*pos+2);
+    segTree[pos] = (segTree[2*pos+1] + segTree[2*pos+2]);
+}
+
+int rangeQueries(vector<int> segTree, int qlow, int qhigh, int low, int high, int pos){
+    if(qlow <= low && qhigh >= high)
+        return segTree[pos];
+    if(qlow > high || qhigh < low)
+        return 0;
+    int mid = (low + high)/2;
+    return rangeQueries(segTree, qlow, qhigh, low, mid, 2*pos+1)+rangeQueries(segTree, qlow, qhigh, mid+1, high, 2*pos+2);
+}
+
+void updateQuery(vector<int> &segTree, int index, int diff, int low, int high, int pos){
+    if(index < low || index > high)
+        return;
+    segTree[pos] += diff;
+    if(low != high){
+        int mid = (low + high)/2;
+        updateQuery(segTree, index, diff, low, mid, 2*pos+1);
+        updateQuery(segTree, index, diff, mid+1, high, 2*pos+2);
+    }
+}
+
+int main() {
+    int n; cin >> n;
+    int input[n], queries, s;
+    for(int i = 0; i < n; i++)
+        cin >> input[i];
+    if(!(n & n-1))  s = 2*n-1;
+    else s = 2*(nearestPower(n))-1;
+    vector<int> segTree(s, 0);
+    constructTree(input, segTree, 0, n-1, 0);
+    cin >> queries;
+    while(queries--){
+        int a, b, c;
+        cin >> a >> b >> c;
+        if(a)
+            cout << rangeQueries(segTree, b, c, 0, n-1, 0);
+        else{
+            int diff = c-input[b];
+            input[b] = c;
+            updateQuery(segTree, b, diff, 0, n-1, 0);
+        }
+    }
+    
+    return 0;
+}
