@@ -1,18 +1,44 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
+int last(int arr[], int x, int low, int high, int n){
+    if (high >= low){ 
+        int mid = (high + low)/2; 
+        if (( mid == n-1 || x < arr[mid+1]) && arr[mid] == x) 
+            return mid; 
+        else if (x < arr[mid]) 
+            return last(arr, x, low, mid-1, n); 
+        else
+            return last(arr, x, mid+1, high, n); 
+    } 
+    return -1; 
+}
+    
+int first(int arr[], int x, int low, int high, int n){
+    if(high >= low){
+        int mid = (low + high)/2;
+        if((mid == 0 || x > arr[mid-1]) && arr[mid] == x)
+            return mid;
+        else if(x > arr[mid])
+            return first(arr, x, mid+1, high, n);
+        else
+            return first(arr, x, low, mid-1, n);
+    }
+    return -1;
+}
+
 int main(){
-  int n, freq = 0; cin >> n;
-  long k;
-  long long arr[n];
-  for(int i = 0; i < n; i++)
-    cin >> arr[i];
-  cin >> k;
+    int n, k; cin >> n;
+    int arr[n];
+    for(int i = 0; i < n; i++)
+        cin >> arr[i];
+    cin >> k;
   
-  for(int i = 0; i < n; i++)
-    if(arr[i] == k) freq++;
-  cout << freq;
-  return 0;
+    sort(arr, arr+n);
+    
+    cout << last(arr, k, 0, n-1, n)-first(arr, k, 0, n-1, n)+1;
+    return 0;
 }
   
   
