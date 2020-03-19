@@ -1,0 +1,34 @@
+#include <iostream>
+using namespace std;
+
+int firstMissingNum(int arr[], int low, int high) {
+    int temp;
+    int mid = (low+high)/2;
+    if(mid == 0 || high <= low)
+        return -1;
+    if((arr[mid-1]+1 == arr[mid]) && (arr[mid]+1 == arr[mid+1])){
+        temp = firstMissingNum(arr, low, mid);
+        if(temp>0)
+            return temp;
+        else
+            return firstMissingNum(arr, mid+1, high);
+    }
+    else{
+        temp = firstMissingNum(arr, low, mid);
+        if(temp>0)
+            return temp;
+        else{
+            int mn;
+            mn = (arr[mid-1]+1 != arr[mid])?arr[mid-1]+1:arr[mid]+1;
+            return mn;
+        }
+    }
+}
+
+int main() {
+    int n; cin >> n;
+    int arr[n];
+    for(int i = 0; i < n; i++)
+        cin >> arr[i];
+    cout << firstMissingNum(arr, 0, n-1);
+}
